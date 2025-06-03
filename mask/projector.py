@@ -68,6 +68,10 @@ class GaussianProjector(torch.nn.Module):
         self.num_mask = 0
         self.assigned_gaussians = [] # We don't want the same Gaussian to be assigned to multiple masks
 
+        # Additions for separate.py
+        self.model_path = dataset.model_path
+        self.loaded_iter = iteration
+
     @property
     def get_num_mask(self):
         if len(self.gaussian_idx_bank) == 0:
@@ -156,8 +160,10 @@ class GaussianProjector(torch.nn.Module):
             "front_percentage": self.front_percentage,
             "iou_threshold": self.iou_threshold,
             "num_patch": self.num_patches,
+            "ply_path": os.path.join(self.model_path, "point_cloud", "iteration_" + str(self.loaded_iter), "point_cloud.ply")
         }
         json.dump(info, open(os.path.join(self.associated_mask_folder, "info.json"), "w"))
+        torch.save(self.gaussian_idx_bank, os.path.join(self.associated_mask_folder, "gaussian_idx_bank.pt"))
 
     def visualize_mask_association(self, object_mask):
         h, w = object_mask.shape

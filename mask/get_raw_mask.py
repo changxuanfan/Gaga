@@ -11,6 +11,8 @@ from typing import Dict
 from argparse import ArgumentParser
 from tqdm import tqdm
 import json
+import detectron2
+print(detectron2.__file__)
 
 def get_n_different_colors(n: int) -> np.ndarray:
     np.random.seed(0)
@@ -38,8 +40,8 @@ def get_seg_model(config: Dict, seg_method: str, device: str):
     elif seg_method == "entityseg":
         from detectron2.config import get_cfg
         from detectron2.projects.deeplab import add_deeplab_config
-        from detectron2.projects.CropFormer.mask2former import add_maskformer2_config
-        from detectron2.projects.CropFormer.demo_cropformer.predictor import VisualizationDemo
+        from .detectron2.projects.CropFormer.mask2former import add_maskformer2_config
+        from .detectron2.projects.CropFormer.demo_cropformer.predictor import VisualizationDemo
 
         def setup_cfg(config):
             # load config from file and command-line arguments
